@@ -1,0 +1,49 @@
+<!-- regform.ejs -->
+<form action="/register" method="POST" style="
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: right;
+    background-color: #333a40;
+    margin: 2rem;
+    color: gray;
+    width: 50%;
+    right: 0px;
+    border-radius: 10px;
+    padding: 11px;
+    font-size: 1.2rem;">
+    <div style="display: flex; flex-direction: column; margin: 1rem;">
+        <input type="text" name="fname" placeholder="First name">
+        <input type="text" name="lname" placeholder="Last name">
+        <input type="text" name="address" placeholder="Address">
+        <input type="text" name="city" placeholder="City">
+        <input type="text" name="state" placeholder="State">
+        <input type="text" name="zip" value="" placeholder="Zip code">
+    </div>
+
+    <select style="margin-bottom: 1rem;" name="age">
+        <option value="select" selected>Select an age group</option>
+        <option value="under18">Under 18</option>
+        <option value="18-24">18 -24</option>
+        <option value="25-40">25-40</option>
+        <option value="41-56">41-56</option>
+        <option value="57+">57+</option>
+    </select>
+
+    <input type="radio" name="gender" value="Male">
+    <label for="male">Male</label>
+
+    <input type="radio" name="gender" value="Female">
+    <label for="female">Male</label>
+
+    <input type="radio" name="gender" value="Undisclosed" checked>
+    <label for="undisclosed"  style="margin-bottom: 1rem;">Prefer not to say</label>
+
+    <p>Check the box if you consent to our terms</p>
+    <input type="checkbox" name="checkbox" style="margin-bottom: 1rem;">
+
+    <textarea id="bio" name="bio" rows="4" cols="50" placeholder="Type your bio here" style="width: 50%; margin: 1rem; border-radius: 10px;"></textarea>
+
+    <input type="submit">
+
+</form>

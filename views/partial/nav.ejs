@@ -1,0 +1,62 @@
+<!-- nav.ejs -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container px-lg-5">
+        <a class="navbar-brand" href="#!">Start Bootstrap</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <% if (pagename == "Home") {%>
+                    <a class="nav-link" style="color: orange" href="/">Home</a>
+                    <%}
+                    else{%>
+                        <a class="nav-link" href="/">Home</a>
+                    <%}%>
+                </li>
+                <li class="nav-item">
+                    <% if (pagename == "About") {%>
+                        <a class="nav-link" style="color: orange" href="/about">About</a>
+                    <%}
+                    else{%>
+                        <a class="nav-link" href="/about">About</a>
+                    <%}%>
+                </li>
+                <li class="nav-item">
+                    <% if (pagename == "Contact") {%>
+                        <a class="nav-link" style="color: orange" href="/contact">Contact</a>
+                    <%}
+                    else{%>
+                        <a class="nav-link" href="/contact">Contact</a>
+                    <%}%>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div style="z-index: 12;
+    display: block;
+    text-align: right;
+    background-color: #333a40;
+    margin-right: 0px;
+    padding-right: 20px;
+    color: gray;
+    position: absolute;
+    width: 155px;
+    margin-top: 4px;
+    padding-top: 5px;
+    right: 0px;
+    border-radius: 10px;
+    padding: 11px;
+    font-size: 12px;">
+
+    <form action="/login" method="POST">
+        <input type="text" name="email" placeholder="email">
+        <input type="text" name="password" placeholder="password">
+        <input type="submit">
+    </form>
+
+</div>
+
+
+

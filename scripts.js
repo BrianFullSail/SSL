@@ -1,48 +1,105 @@
+// Enable strict routing
+// Disabled by default, "/foo" and "/foo/" are treated the same by the router.
+"use strict"
+
 // loading the libraries to use
+
 const fs = require("fs")
 const http = require("http")
 const path = require("path")
 const url = require("url")
 
-// creating the server
-http.createServer(function(req, res){
+const express = require("express")
+const request = require("request")
+const bodyParser = require("body-parser")
 
-    let parsed = url.parse(req.url)
-    let filename = path.parse(parsed.pathname)
+// npm install -g express
+// npm install -g ejs
+// npm install -g request
+// npm install -g body-parser
 
-    let filen = filename.name == "" ? "index" : filename.name
-    let ext = filename.ext == "" ? ".html" : filename.ext
-    let dir = filename.dir == "/" ? "" : filename.dir + "/"
-    let page = filename.name == "" ? "index.html" : filename.name
+let ejs = require("ejs")
+const router = express.Router()
+const app = express()
+app.set("view engine", "ejs")
+app.engine("ejs", require("ejs").__express)
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded( {extended:true} ))
 
-    let f = (dir + filen + ext).replace("/", "") //removing the / and replacing with a blank
+// where to get files to use like css styles
+app.use(express.static("public"))
+app.use("/", router);
+var server = app.listen("8080")
 
-    // create dictionary for file types
-    const mimeTypes = {
-        '.html': 'text/html',
-        '.js': 'text/javascript',
-        '.css': 'text/css',
-        '.png': 'image/png',
-        '.jpg': 'image/jpg',
-        '.gif': 'image/gif'
+router.get("/", function(req, res){
+
+    res.render("index", {pagename: "Home"}) // views/index.ejs
+
+})
+
+router.get("/about", function(req, res){
+
+    res.render("about", {pagename: "About"}) // views/about.ejs
+
+})
+
+router.get("/contact", function(req, res){
+
+    res.render("contact", {pagename: "Contact"}) // views/contact.ejs
+
+})
+
+router.post("/login", function(req, res){
+
+    let errors = []
+    if(req.body.email == ""){
+        errors.push("Email is required")
+    }
+    if(req.body.password == ""){
+        errors.push("Password is required")
+    }
+    if(!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(req.body.email)){
+        errors.push("Email is not valid")
+    }
+    if(!/^[a-zA-Z]\w(3,14)$/.test(req.body.password)){
+        errors.push("Password is not valid")
     }
 
-    if(f){
+    // if failed email or password render home page and pass the errors array 
+    res.render("index", {pagename: "Home", errors: errors})
 
-        fs.readFile(f, function(err, data) {
+})
 
-            if(page){
-                if(mimeTypes.hasOwnProperty(ext)){
-                    // go through the dictionary and match the file type
-                    res.writeHead(200, { 'Content-Type': mimeTypes[ext] })
-                    // if the ext is a .html write to the file
-                    if(ext == ".html"){
-                        res.write("<script>var page = '" + page + "';</script>")
-                    }
-                    res.end(data, 'utf-8')
-                }
-            }
-        })
+router.post("/register", function(req, res){
+
+    let errors = []
+    if(req.body.fname == ""){
+        errors.push("First name is required")
     }
-// listen on port 8080
-}).listen("8080")
+    if(req.body.lname == ""){
+        errors.push("Last name is required")
+    }
+    if(req.body.address == ""){
+        errors.push("Address is required")
+    }
+    if(req.body.city == ""){
+        errors.push("City is required")
+    }
+    if(req.body.state == ""){
+        errors.push("State is required")
+    }
+    if(!/^\d{5}(-\d{4})?$/.test(req.body.zip)){
+        errors.push("Invalid zip code")
+    }
+    if(req.body.age == "select"){
+        errors.push("No age group was selected")
+    }
+    if(req.body.bio == ""){
+        errors.push("No bio was provided")
+    }
+
+    // if failed render contact page and pass the errors array
+    // else if passed render contact page with errors array being empty
+    res.render("contact", {pagename: "Contact", errors: errors})
+
+})
