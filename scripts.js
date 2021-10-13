@@ -94,6 +94,12 @@ router.post("/register", function(req, res){
     if(req.body.age == "select"){
         errors.push("No age group was selected")
     }
+    if(req.body.gender == undefined){
+        errors.push("No gender was selected")
+    }
+    if(req.body.checkbox == undefined){
+        errors.push("Consent box was not checked")
+    }
     if(req.body.bio == ""){
         errors.push("No bio was provided")
     }
@@ -101,5 +107,6 @@ router.post("/register", function(req, res){
     // if failed render contact page and pass the errors array
     // else if passed render contact page with errors array being empty
     res.render("contact", {pagename: "Contact", errors: errors})
+    console.log(req.body)
 
 })
