@@ -17,8 +17,10 @@ const bodyParser = require("body-parser")
 // npm install -g ejs
 // npm install -g request
 // npm install -g body-parser
+// npm install express-session
 
 let ejs = require("ejs")
+const session = require("express-session")
 const router = express.Router()
 const app = express()
 app.set("view engine", "ejs")
