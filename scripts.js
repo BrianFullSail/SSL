@@ -20,13 +20,17 @@ const bodyParser = require("body-parser")
 // npm install express-session
 
 let ejs = require("ejs")
+
 const session = require("express-session")
 const router = express.Router()
 const app = express()
+app.use(session({secret:"secret", saveUninitialized: true, resave: true}))
 app.set("view engine", "ejs")
 app.engine("ejs", require("ejs").__express)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded( {extended:true} ))
+var sess;
+
 
 // where to get files to use like css styles
 app.use(express.static("public"))
@@ -34,26 +38,48 @@ app.use("/", router);
 var server = app.listen("8080")
 
 router.get("/", function(req, res){
-
-    res.render("index", {pagename: "Home"}) // views/index.ejs
+    sess = req.session
+    res.render("index", {pagename: "Home", sess: sess}) // views/index.ejs
 
 })
 
 router.get("/about", function(req, res){
-
-    res.render("about", {pagename: "About"}) // views/about.ejs
+    sess = req.session
+    res.render("about", {pagename: "About", sess: sess}) // views/about.ejs
 
 })
 
 router.get("/contact", function(req, res){
+    sess = req.session
+    res.render("contact", {pagename: "Contact", sess: sess}) // views/contact.ejs
 
-    res.render("contact", {pagename: "Contact"}) // views/contact.ejs
+})
 
+router.get("/profile", function(req, res){
+    sess = req.session
+    if(typeof(sess) == undefined || sess.loggedin != true){
+        var errors = ["Not a authenticated user"]
+        res.render("index", {pagename: "Home", errors: errors})
+    }
+    else{
+        res.render("profile", {pagename: "Profile", sess: sess})
+    }
+})
+
+router.get("/logout", function(req, res){
+    sess = req.session
+    sess.loggedin = false;
+
+    sess.destroy(function(err){
+        res.redirect("/")
+    })
 })
 
 router.post("/login", function(req, res){
 
     let errors = []
+    sess = req.session
+
     if(req.body.email == ""){
         errors.push("Email is required")
     }
@@ -67,8 +93,18 @@ router.post("/login", function(req, res){
         errors.push("Password is not valid")
     }
 
-    // if failed email or password render home page and pass the errors array 
-    res.render("index", {pagename: "Home", errors: errors})
+    // write conditional here if matching user name and password is good show profile, if bad show index with errors
+    if(req.body.email.toLowerCase() == "mike@aol.com" && req.body.password == "abc123"){
+        sess.loggedin = true;
+        res.render("profile", {pagename: "Profile", sess: sess})
+    }
+    if(req.body.email.toLowerCase() != "mike@aol.com" || req.body.password != "abc123"){
+        sess.loggedin = false;
+        errors.push("Emial and/or password is incorrect")
+        res.render("index", {pagename: "Home", errors: errors})
+    }
+    // username - Mike@aol.com
+    // password - abc123
 
 })
 
@@ -109,6 +145,5 @@ router.post("/register", function(req, res){
     // if failed render contact page and pass the errors array
     // else if passed render contact page with errors array being empty
     res.render("contact", {pagename: "Contact", errors: errors})
-    console.log(req.body)
 
 })

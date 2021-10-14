@@ -16,11 +16,11 @@
     <body>
         <%- include("partial/nav") %>
         <!-- display the errors array only if it exists and the length is greater than 0 -->
-        <% if(typeof(errors) != "undefined" && errors.length > 0) {%>
+        <!-- <% if(typeof(errors) != "undefined" && errors.length > 0) {%>
             <% for(x in errors){%>
                 <br><span style="color: red"><%= errors[x] %></span>
             <%}%>
-        <%}%>
+        <%}%> -->
         <!-- display the errors array only if it exists and the length is 0 -->
         <% if(typeof(errors) != "undefined" && errors.length == 0) {%>
             <br><span style="color: green">Success!! Your form has been submitted.</span>
