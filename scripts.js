@@ -57,7 +57,7 @@ router.get("/contact", function(req, res){
 
 router.get("/profile", function(req, res){
     sess = req.session
-    if(typeof(sess) == undefined || sess.loggedin != true){
+    if(typeof(sess) == undefined | sess.loggedin != true){
         var errors = ["Not a authenticated user"]
         res.render("index", {pagename: "Home", errors: errors})
     }
@@ -98,12 +98,12 @@ router.post("/login", function(req, res){
         sess.loggedin = true;
         res.render("profile", {pagename: "Profile", sess: sess})
     }
-    if(req.body.email.toLowerCase() != "mike@aol.com" || req.body.password != "abc123"){
+    if(req.body.email.toLowerCase() != "mike@aol.com" | req.body.password != "abc123"){
         sess.loggedin = false;
-        errors.push("Emial and/or password is incorrect")
+        errors.push("Email and/or password is incorrect")
         res.render("index", {pagename: "Home", errors: errors})
     }
-    // username - Mike@aol.com
+    // username - Mike@aol.com (not case sensitive)
     // password - abc123
 
 })
