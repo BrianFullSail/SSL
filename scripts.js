@@ -40,7 +40,6 @@ var server = app.listen("8080")
 router.get("/", function(req, res){
     sess = req.session
     res.render("index", {pagename: "Home", sess: sess}) // views/index.ejs
-
 })
 
 router.get("/about", function(req, res){
